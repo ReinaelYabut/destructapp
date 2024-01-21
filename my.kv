@@ -1,0 +1,112 @@
+<RootWidget>:
+    settings_cls: 'SettingsWithSidebar'
+    inputbutton: inputbutton
+    inputcontent: inputcontent
+    outputcontent: outputcontent
+
+    orientation: 'vertical'
+
+    BoxLayout: 
+        orientation: 'vertical'
+        size_hint: 1, 0.75  # Adjusted the size_hint to make space for the ListWidget
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1  # Adjusted the size_hint for the BoxLayout
+
+            Label:
+                text: 'Destruct Notes'
+                size_hint: 0.9, 1
+                font_name: 'bold1.ttf'
+                font_size: '24sp'  # Set the font size to 24 scale-independent pixels
+                bold: True  # Make the text bold
+
+
+            Button:
+                text: 'Settings'
+                size_hint: 0.1, 1  # Adjusted the size_hint for the "Settings" button
+                pos_hint: {'right': 1}  # Position the "Settings" button at the right
+                on_press: app.open_settings()
+
+            Button:
+                text: 'Delete All'
+                size_hint: 0.1, 1
+                pos_hint: {'right': 0.5}
+                on_press: root.delete_all_items()
+
+        ListWidget:
+            id: outputcontent
+            viewclass: 'Label'
+            orientation: 'vertical'
+            size_hint: 1, 1
+            pos_hint: {'left': 1, 'y': 1}
+
+            RecycleBoxLayout:
+                default_size: None, dp(46)
+                default_size_hint: 0.7, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                multiline: True
+                pos_hint: {'x': 0, 'center_y': 0.5}  # Position the left edge at the left edge of the screen
+
+                
+
+    RelativeLayout:  # Add a RelativeLayout for the bottom-right buttons
+        size_hint: 1, 0.25  # Adjusted the size_hint
+
+
+        Button:
+            id: inputbutton
+            size_hint: 0.25, 0.25  # Adjusted the size_hint for the "Add" button
+            text: 'add'
+            on_press: root.add_item()
+            pos_hint: {'right': 1, 'bottom': 1}  # Position the "Add" button at the bottom-right
+            size_hint_max: 100, 100  # Set maximum size for the "Add" button
+            size_hint_min: 50, 50  # Set minimum size for the "Add" button
+
+        TextInput:
+            id: inputcontent
+            multiline: True
+            size_hint: 0.90, 0.25  # Adjusted the size_hint for the "Configure Time" button
+            pos_hint: {'x': 0.001, 'bottom': 1}  # Position the "Configure Time" button at the bottom-left
+            on_text: root.text_input = self.text
+            hint_text: 'Open up'
+
+<SettingsWithSidebar>:
+    BoxLayout:
+        orientation: 'horizontal'
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: None
+                width: self.minimum_width
+                padding: '10dp'
+
+                Label:
+                    text: 'Interval Settings'
+                    font_size: '20sp'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Slider:
+                    id: interval_slider
+                    min: 1
+                    max: 10
+                    step: 1
+                    value: app.interval_setting  # Set the initial value based on the app's attribute
+                    on_value: app.on_interval_slider_change(self.value)
+
+                Label:
+                    text: 'Interval: {} seconds'.format(int(interval_slider.value))
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Button:
+                    text: 'Apply'
+                    on_press: app.apply_interval_settings()
+                    size_hint_y: None
+                    height: '40dp'
+
+
+
