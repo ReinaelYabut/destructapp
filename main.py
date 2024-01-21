@@ -5,6 +5,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.lang import Builder
+from kivymd.app import MDApp
+from kivymd.uix.button import MDIconButton
+from kivy.core.window import Window
+
 
 class ListWidget(RecycleView):
 
@@ -40,11 +45,10 @@ class RootWidget(BoxLayout):
         self.outputcontent.items = []
         self.outputcontent.update()
 
-
-class MyApp(App):
+class MyApp(MDApp):  # Change the inheritance to MDApp
     def build(self):
-        # Initialize settings
         self.config.read('settings.ini')
+        Window.clearcolor = (0, 0, 0, 1)
         return RootWidget()
 
     def build_config(self, config):
@@ -53,10 +57,9 @@ class MyApp(App):
     def build_settings(self, settings):
         settings.add_json_panel('App Settings', self.config, data='''
         [
-            {"type": "title", "title": "App Settings"},
             {"type": "options",
              "title": "Edit Self Destruct Timer",
-             "desc": "Adjust the delay time for removing notes",
+             "desc": "Choose the time before the notes gets deletes, it's in seconds.",
              "section": "settings",
              "key": "delay_time",
              "options": ["5", "10", "30", "60", "86400", "2592000","31536000"]
